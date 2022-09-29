@@ -19,8 +19,11 @@ type TQueryResultRadar = {
 type TRadarKeys = keyof TRadar
 type TFilterTypes = keyof Omit<TRadar, 'date'>
 
-
-type TRequest = Request<{}, {}, TRadar>
+export type TRequestBody = {
+    type: string
+    data: TRadar
+}
+type TRequest = Request<{}, {}, TRequestBody>
 type TRequestWithId = Request<{ id: string }, {}, TRadar>
 type TRequestPagination = Request<{}, {}, TRadar, {
     filterType?: TRadarKeys
@@ -88,7 +91,7 @@ export const sendError = (e: any, res: TResponse) => {
 export const RadarController = {
     create: async (req: TRequest, res: TResponse) => {
         try {
-            const {date, name, count, range} = req.body
+            const {date, name, count, range} = req.body.data
             console.log(`POST radar: `, date, name, count, range)
             const data = await db.query<TQueryResultRadar>(
                 `INSERT INTO radar (date, name, count, range) values ($1, $2, $3, $4) RETURNING *`,

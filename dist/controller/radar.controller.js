@@ -61,7 +61,7 @@ exports.sendError = sendError;
 exports.RadarController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { date, name, count, range } = req.body;
+            const { date, name, count, range } = req.body.data;
             console.log(`POST radar: `, date, name, count, range);
             const data = yield index_1.db.query(`INSERT INTO radar (date, name, count, range) values ($1, $2, $3, $4) RETURNING *`, [date, name, count, range]);
             res.json({
