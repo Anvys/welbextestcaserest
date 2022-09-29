@@ -5,10 +5,12 @@ import {getDB} from "./db/dbconnect";
 import path from "path";
 dotenv.config()
 
-export const pass = `${process.env.DBPASS}`
-export const dbPort = Number(process.env.DBPORT)
-export const dbName = `${process.env.DBNAME}`
-export const db = getDB(pass, dbPort, dbName)
+export const pass = `${process.env.DB_PASS}`
+export const dbPort = Number(process.env.DB_PORT)
+export const dbName = `${process.env.DB_NAME}`
+export const dbUser = `${process.env.DB_USER}`
+export const dbHost = `${process.env.DB_HOST}`
+export const db = getDB(pass, dbPort, dbName,dbUser,dbHost)
 const port = process.env.PORT || 3333;
 const allowPort = 3000
 
