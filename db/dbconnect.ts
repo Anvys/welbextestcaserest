@@ -1,9 +1,9 @@
 import {Pool} from "pg";
 
 export const getDB = (pass:string, dbPort:number, dbName:string, user:string, host:string) => new Pool({
-    user: `postgres`,
+    user: user,
     password:pass,
-    host: `localhost`,
+    host: host,
     port: dbPort ,
     database: dbName
 })
