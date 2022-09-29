@@ -8,7 +8,6 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const radarRoutes_1 = require("./routes/radarRoutes");
 const dbconnect_1 = require("./db/dbconnect");
-const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 exports.pass = `${process.env.DB_PASS}`;
 exports.dbPort = Number(process.env.DB_PORT);
@@ -18,8 +17,8 @@ exports.dbHost = `${process.env.DB_HOST}`;
 exports.db = (0, dbconnect_1.getDB)(exports.pass, exports.dbPort, exports.dbName, exports.dbUser, exports.dbHost);
 const port = process.env.PORT || 3333;
 const allowPort = 3000;
-const STATIC_FILES = path_1.default.join(__dirname, '../client/', 'build');
-console.log(STATIC_FILES);
+// const STATIC_FILES = path.join(__dirname, '../client/', 'build')
+// console.log(STATIC_FILES)
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
 exports.app.use(function (req, res, next) {
@@ -30,9 +29,9 @@ exports.app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     next();
 });
-exports.app.use(express_1.default.static(STATIC_FILES));
+// app.use(express.static(STATIC_FILES))
 exports.app.use('/api', (0, radarRoutes_1.radarRoutes)());
-exports.app.get('/*', (_, res) => res.sendFile(path_1.default.join(STATIC_FILES, 'index.html')));
+// app.get('/*', (_, res) => res.sendFile(path.join(STATIC_FILES, 'index.html')))
 exports.app.listen(port, () => {
     console.log(`Running on port ${port}`);
     // dbconnect().then((data) => console.log(`connected to ${data.connection?.db.namespace}`)).catch(err => console.log(`server layer => ${err}`))
