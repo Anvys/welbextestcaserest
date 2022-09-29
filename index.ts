@@ -14,8 +14,8 @@ export const db = getDB(pass, dbPort, dbName,dbUser,dbHost)
 const port = process.env.PORT || 3333;
 const allowPort = 3000
 
-const STATIC_FILES = path.join(__dirname, '../client/', 'build')
-console.log(STATIC_FILES)
+// const STATIC_FILES = path.join(__dirname, '../client/', 'build')
+// console.log(STATIC_FILES)
 
 export const app = express()
 app.use(express.json())
@@ -27,9 +27,9 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     next();
 });
-app.use(express.static(STATIC_FILES))
+// app.use(express.static(STATIC_FILES))
 app.use('/api',radarRoutes())
-app.get('/*', (_, res) => res.sendFile(path.join(STATIC_FILES, 'index.html')))
+// app.get('/*', (_, res) => res.sendFile(path.join(STATIC_FILES, 'index.html')))
 
 
 app.listen(port, () => {
