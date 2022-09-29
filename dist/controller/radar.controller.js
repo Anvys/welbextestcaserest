@@ -9,55 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RadarController = exports.sendError = exports.getExprResult = void 0;
+exports.RadarController = void 0;
 const index_1 = require("../index");
 const StatusCodes_1 = require("../utils/StatusCodes");
-const getExprResult = (type, str, search, expr) => {
-    switch (type) {
-        case "name":
-            switch (expr) {
-                case StatusCodes_1.exprCodes.equal:
-                    // console.log(`${String(str).trim()} / ${search}`)
-                    return String(str).trim().toUpperCase() === String(search).trim().toUpperCase();
-                case StatusCodes_1.exprCodes.less:
-                case StatusCodes_1.exprCodes.more:
-                case StatusCodes_1.exprCodes.include:
-                    return String(str).includes(search);
-                default:
-                    return false;
-            }
-        case "count":
-        case "range":
-            switch (expr) {
-                case StatusCodes_1.exprCodes.equal:
-                    return Number(str) === Number(search);
-                case StatusCodes_1.exprCodes.less:
-                    return Number(str) < Number(search);
-                case StatusCodes_1.exprCodes.more:
-                    return Number(str) > Number(search);
-                case StatusCodes_1.exprCodes.include:
-                    return String(str).includes(search);
-                default:
-                    return false;
-            }
-    }
-};
-exports.getExprResult = getExprResult;
-const sendError = (e, res) => {
-    let msg = '';
-    if (typeof e === "string") {
-        msg = e.toUpperCase(); // works, `e` narrowed to string
-    }
-    else if (e instanceof Error) {
-        msg = e.message; // works, `e` narrowed to Error
-    }
-    res.json({
-        msg: [`${msg}`],
-        status: StatusCodes_1.StatusCodes.badRequest,
-        data: null
-    });
-};
-exports.sendError = sendError;
+const UtilFunc_1 = require("../utils/UtilFunc");
 exports.RadarController = {
     create: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -74,7 +29,7 @@ exports.RadarController = {
             });
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
     getAll: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -91,13 +46,12 @@ exports.RadarController = {
             });
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
     getAllWithPagination: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log(`Get with filters`);
-            console.log(req.query);
+            console.log(`Get with filters`, req.query);
             const page = req.query.page || 1; //default page = 1
             const count = Number(req.query.count) || 10; //default row on page = 10
             const queryFilter = req.query.filterType;
@@ -110,11 +64,9 @@ exports.RadarController = {
             const data = yield index_1.db.query(`SELECT * FROM radar ORDER BY id ASC`);
             // if filter not undefined do filter
             if (!!filterType && searchStr.trim().length > 0) {
-                // console.log(`1 len=${data.rows.length}`)
-                // console.log(`page:${page},count:${count},filterType:${filterType},searchStr:${searchStr},expr:${expr},startIndex:${startIndex}`)
                 const filteredRows = data.rows
                     // search string filter
-                    .filter(v => (0, exports.getExprResult)(filterType, v[filterType], searchStr, expr))
+                    .filter(v => (0, UtilFunc_1.getExprResult)(filterType, v[filterType], searchStr, expr))
                     //paginator filter
                     .filter((v, i) => i >= startIndex && i < (startIndex + count));
                 console.log(filteredRows.length);
@@ -128,8 +80,6 @@ exports.RadarController = {
                 });
             }
             else { // else response just pagination
-                // console.log(`2 len=${data.rows.length}`)
-                // console.log(page, count, filterType, searchStr, expr, startIndex)
                 //paginator filter
                 const filteredRows = data.rows
                     .filter((v, i) => i >= startIndex && i < (startIndex + count));
@@ -144,7 +94,7 @@ exports.RadarController = {
             }
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
     get: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -162,12 +112,12 @@ exports.RadarController = {
             });
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
     update: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { date, name, count, range } = req.body;
+            const { date, name, count, range } = req.body.data;
             const id = req.params.id;
             console.log(`PUT radar id=${id}: `, date, name, count, range);
             const data = yield index_1.db.query(`UPDATE radar set date = $1 name = $2 count = $3 range = $4 WHERE id = $5 RETURNING *`, [date, name, count, range, id]);
@@ -181,7 +131,7 @@ exports.RadarController = {
             });
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
     delete: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -199,7 +149,7 @@ exports.RadarController = {
             });
         }
         catch (e) {
-            (0, exports.sendError)(e, res);
+            (0, UtilFunc_1.sendError)(e, res);
         }
     }),
 };

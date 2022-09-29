@@ -16,7 +16,3 @@ const radarRoutes = () => {
     return router;
 };
 exports.radarRoutes = radarRoutes;
-// fetch('http://localhost:3333/api/radar',
-//     {method:'GET',
-//         headers:{'content-type':'application/json'}})
-//     .then(json => console.log(json)).catch(e=>console.log(e.message))

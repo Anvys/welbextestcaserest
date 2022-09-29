@@ -34,5 +34,4 @@ app.use('/api',radarRoutes())
 
 app.listen(port, () => {
     console.log(`Running on port ${port}`)
-    // dbconnect().then((data) => console.log(`connected to ${data.connection?.db.namespace}`)).catch(err => console.log(`server layer => ${err}`))
 });

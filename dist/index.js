@@ -34,5 +34,4 @@ exports.app.use('/api', (0, radarRoutes_1.radarRoutes)());
 // app.get('/*', (_, res) => res.sendFile(path.join(STATIC_FILES, 'index.html')))
 exports.app.listen(port, () => {
     console.log(`Running on port ${port}`);
-    // dbconnect().then((data) => console.log(`connected to ${data.connection?.db.namespace}`)).catch(err => console.log(`server layer => ${err}`))
 });
